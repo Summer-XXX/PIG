@@ -21,7 +21,7 @@ struct pig{
 };
     QVector <pig> pigs[100];
     int currentpighome,currentmonth,maxlockpighome,gold;
-    int buffprice=100,buffspeed=100,maxpigcancell=1000;
+    int buffprice=100,buffspeed=100,maxpigcansell=1000;
     int pighomestoretype[105];
     int sciencemap[2][15];
     int scx,scy;
@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->Qbtnloadgame->setMenu(load_menu);
     QObject::connect(loadlateset, SIGNAL(triggered(bool)), this, SLOT(on_loadgame_clicked()));
     QObject::connect(resetdata, SIGNAL(triggered(bool)), this, SLOT(on_reset_clicked()));
-    canexit=1;
+    //canexit=1;
 
 
     setAllbutadisappear();
@@ -89,7 +89,7 @@ void MainWindow::on_Qbtngameexit_clicked()
         reply = QMessageBox::critical(this, "豚の夢","您确定要退出游戏吗？",QMessageBox::Yes| QMessageBox::No);
         if (reply == QMessageBox::Yes)
         {
-            canexit=0;
+            //canexit=0;
             QApplication* app;
             //QCoreApplication::exit();
             app->closeAllWindows();
@@ -128,7 +128,7 @@ void MainWindow::setAllbutadisappear()
     ui->Buta9->setVisible(false);
     ui->Buta10->setVisible(false);
 }
-void MainWindow::setAllbutaOn()
+void MainWindow::   setAllbutaOn()
 {
     ui->Buta1->setVisible(true);
     ui->Buta2->setVisible(true);
@@ -162,14 +162,15 @@ void MainWindow::on_Qbtngamestart_clicked()
     maxlockpighome=1;
     pighomestoretype[1]=1;
     gold=1000;
-    pig buta1={50.0,1,1,1};
+    pig buta1={50.0,1,1,1};      //struct pig{    double w;int boughtyear,boughtday,type;};
     pigs[0].push_back(buta1);
-    pigs[0].push_back(buta1);
+    pigs[0].push_back(buta1);    //两个0
     showthishomepig(0);
     on_Qbtnpighome_clicked();
     setAllbutaOn();
     //on_MoveButa();
 }
+/*
 void playtheMovie(QLabel *now,QMovie *bigpig,QMovie *bigpigr)
 {
     //qDebug()<<"DID";
@@ -195,13 +196,14 @@ void playtheMovie(QLabel *now,QMovie *bigpig,QMovie *bigpigr)
     //QTimer::singleShot(1000, &loop, SLOT(quit()));
     //loop.exec();
 }
+*/
 
 void MainWindow::showthishomepig(int v)
 {
     //QMovie *bigpig = new QMovie(":/new/buta/Resource/bigpigr.gif");
     //QMovie *blackpig = new QMovie(":/new/buta/Resource/blackpigr.gif");
     //QMovie *colouredpig = new QMovie(":/new/buta/Resource/colouredpigr.gif");
-    int l=pigs[v].size();
+    int l=pigs[v].size();   //猪的数量
     qDebug()<<"WHY"<<l;
     if (l==1)
     {
@@ -565,6 +567,7 @@ void MainWindow::showthishomepig(int v)
     }
 }
 
+
 void MainWindow::on_pushButton_3_clicked()
 {
     scx=0;
@@ -664,7 +667,7 @@ void MainWindow::on_pushButton_14_clicked()
     ui->QFoucusCost->setText("10000");
 }
 
-void MainWindow::on_Qbtnscience_clicked()
+void MainWindow::on_Qbtnscience_clicked()   // 焦点开关
 {
     if (ui->QFocus->isVisible())
         ui->QFocus->hide();
@@ -770,7 +773,7 @@ void MainWindow::chgthishometypetxt()
 }
 
 
-void MainWindow::on_Qbtnpighome_clicked()
+void MainWindow::on_Qbtnpighome_clicked()  //点击猪圈
 {
 
     ui->QGoldWidget->show();
@@ -781,7 +784,7 @@ void MainWindow::on_Qbtnpighome_clicked()
     ui->QGold->setText(temp);
     temp=QString::number(currentmonth,10);
     ui->QCurrentTime->setText(temp);
-    ui->QTmaxtrade->setText(QString::number(maxpigcancell,10));
+    ui->QTmaxtrade->setText(QString::number(maxpigcansell,10));
     int sum=0;
     for (int i=0;i<maxlockpighome;i++)
     {
@@ -794,7 +797,7 @@ void MainWindow::on_Qbtnpighome_clicked()
     ui->QMon->setText(temp);
     chgthishometypetxt();
 }
-void MainWindow::resetpigmov()
+void MainWindow::resetpigmov() //正确显示猪圈
 {
     chgthishometypetxt();
     ui->QBtnUnlockPigHome->setVisible(false);
@@ -1006,14 +1009,16 @@ void MainWindow::on_QBtnShopAplly_clicked()
     data.close();
     for (int i=0;i<maxlockpighome;i++)
     {
-        pig ww;ww.boughtday=currentmonth;ww.boughtyear=currentmonth;
+        pig ww;
+        ww.boughtday=currentmonth;
+        ww.boughtyear=currentmonth;
         if (pighomestoretype[i+1]==1&&(a>=1||b>=1))
         {
             int l=10-pigs[i].size();
             while (l--)
             {
-                int q=qrand()%21;
-                q+=30;
+                int q=qrand()%21;  //0-20
+                q+=30;  //20-50
                 double d=q*1.0;
                 ww.w=d;
                 if (a>=1)
@@ -1216,13 +1221,13 @@ void MainWindow::on_QBtnNexitMonth_clicked()
     {
         for (int j=0;j<pigs[i].size();j++)
         {
-            int x=qrand()%12;
-            x*=15;
+            int x=qrand()%13;   //x处于0-12
+            x*=30;
             qDebug()<<"buffspeed"<<buffspeed<<endl;
             double t=1.0*buffspeed*x/1000;
             pigs[i][j].w+=t;
-            if (pigs[i][j].w>=150.0f)
-               pigs[i][j].w=150.0f;
+            //if (pigs[i][j].w>=150.0f)
+            //pigs[i][j].w=150.0f;
         }
     }
     if ((currentmonth-1)%3==0)
@@ -1274,10 +1279,10 @@ void MainWindow::on_QBtnNexitMonth_clicked()
         ui->QTtp3m->setText(QString::number(c3,10));
         int ssum=c1+c2+c3;
         ui->QTsellsum->setText(QString::number(ssum,10));
-        if (w1+w2+w3>maxpigcancell)
+        /*if (w1+w2+w3>maxpigcansell)
         {
             ssum*=0.9;
-        }
+        }*/
         QFile data("record.txt");
         if (data.open(QFile::WriteOnly | QIODevice::Append|QIODevice::Text)) {
             QTextStream out(&data);
@@ -1315,7 +1320,7 @@ void MainWindow::on_pushButton_24_clicked()
         out<<maxlockpighome<<endl;
         out<<buffprice<<endl;
         out<<buffspeed<<endl;
-        out<<maxpigcancell<<endl;
+        out<<maxpigcansell<<endl;
         for (int i=1;i<=100;i++)
             out<<pighomestoretype[i]<<endl;
         for (int i=0;i<=1;i++)
@@ -1355,7 +1360,7 @@ void MainWindow::on_Qbtnloadthegame_clicked()
         if (count==2)maxlockpighome=lineStr.toInt();
         if (count==3)buffprice=lineStr.toInt();
         if (count==4)buffspeed=lineStr.toInt();
-        if (count==5)maxpigcancell=lineStr.toInt();
+        if (count==5)maxpigcansell=lineStr.toInt();
         if (count>=6&&count<=105)
             pighomestoretype[d++]=lineStr.toInt();
         if (count>=106&&count<=127)
@@ -1427,26 +1432,26 @@ void MainWindow::on_pushButton_2_clicked()
     if (scx==0&&scy==8)
         buffprice+=10;
     if (scx==0&&scy==6)
-        maxpigcancell*=3;
+        maxpigcansell*=3;
     if (scx==0&&scy==6)
-        maxpigcancell*=2;
+        maxpigcansell*=2;
     if (scx==0&&scy==7)
         buffspeed+=100;
     if (scx==0&&scy==9)
         buffspeed+=200;
     if (scx==0&&scy==10)
-        buffspeed+=300,maxpigcancell*=4;
+        buffspeed+=300,maxpigcansell*=4;
     if (scx==1&&(scy==1||scy==3||scy==4||scy==5))
         buffprice+=20;
     if (scx==1&&scx==2)
-        buffprice+=10,maxpigcancell*=2;
+        buffprice+=10,maxpigcansell*=2;
     if (scx==1&&(scy==6||scy==7||scy==8||scy==9))
         buffprice+=40;
     if (scx==1&&scy==10)
         buffprice+=50;
     sciencemap[scx][scy]=1;
     QMessageBox::about(NULL, "豚の夢", "焦点设置成功！");
-    ui->QTmaxtrade->setText(QString::number(maxpigcancell,10));
+    ui->QTmaxtrade->setText(QString::number(maxpigcansell,10));
 }
 
 void MainWindow::on_Qbtndeveloper_clicked()
