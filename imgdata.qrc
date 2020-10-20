@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/new/buta">
+        <file>Resource/bigpig.gif</file>
+        <file>Resource/blackpig.gif</file>
+        <file>Resource/colouredpig.gif</file>
+	<file>Resource/bigpigr.gif</file>
+        <file>Resource/blackpigr.gif</file>
+        <file>Resource/colouredpigr.gif</file>
+    </qresource>
+</RCC>
